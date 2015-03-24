@@ -19,6 +19,8 @@ public class BookManager {
 		stmt.setString(2, bookName);
 		stmt.setString(3, publisherCode);
 
+		// Returns the numbers of rows affected by the execution of the SQL statement. Use this method to execute SQL statements
+		// for which you expect to get a number of rows affected - for example, an INSERT, UPDATE, or DELETE statement.
 		int count = stmt.executeUpdate();
 
 		System.out.println(">> Inserted count: " + count);
@@ -29,9 +31,14 @@ public class BookManager {
 	public static Book getBook(int id, Connection conn) throws SQLException {
 		Book book = null;
 
-		PreparedStatement stmt = conn.prepareStatement("SELECT book.isbn, book.name as bookName, publisher.code as publisherCode, publisher.name publisherName FROM book, publisher WHERE isbn = ? AND book.publisher_code like publisher.code;");
+		// PreparedStatement interface extends the Statement interface
+		PreparedStatement stmt = conn.prepareStatement(
+				"SELECT book.isbn, book.name as bookName, publisher.code as publisherCode, publisher.name publisherName " +
+						"FROM book, publisher " + "" +
+						"WHERE isbn = ? AND book.publisher_code like publisher.code;");
 		stmt.setString(1, Integer.toString(id));
 
+		// Returns a ResultSet object. Use this method when you expect to get a result set, as you would with a SELECT statement.
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			Publisher publisher = new Publisher();
